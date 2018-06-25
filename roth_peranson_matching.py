@@ -1,5 +1,16 @@
 import heapq
-# input starts with number of hospitals and number of doctors space separated by
+'''
+input starts with number of hospitals and number of doctors space separated
+For each hospital, there are two lines of input
+the first line contains "l u" (without the quotes) which are the lower and upper quotas
+the second line contains a list of space seperated values, the ith of which denotes the preference given to the
+ith doctor. if the ith value is -1, then the doctor is unacceptable
+
+For each doctor, there is a single line of input
+The line contains a list of space seperated values, the ith of which denotes the preference given to the
+ith hospital. if the ith value is -1, then the hospital is unacceptable
+'''
+
 h,d = list(map(int,input().rstrip().split(" ")))
 h_l_u = [] # (lower quota,upper quota) of hospital i at ith index
 h_list = dict() # a dict of (key,value)->(doctor,preference) of hospital i at ith index
@@ -12,10 +23,10 @@ for i in range(h):
     lu = list(map(int,input().rstrip().split(" ")))
     h_l_u.append((lu[0],lu[1]))
     ar = list(map(int,input().rstrip().split(" ")))
-    h_list[i] = ({ar[j]:j for j in range(len(ar))},{j:ar[j] for j in range(len(ar))})
+    h_list[i] = ({ar[j]:j for j in range(len(ar)) if ar[j]!=-1},{j:ar[j] for j in range(len(ar)) if ar[j]!=-1})
 for i in range(d):
     ar = list(map(int, input().rstrip().split(" ")))
-    d_list[i] = ({ar[j]:j for j in range(len(ar))},{j:ar[j] for j in range(len(ar))})
+    d_list[i] = ({ar[j]:j for j in range(len(ar)) if ar[j]!=-1},{j:ar[j] for j in range(len(ar)) if ar[j]!=-1})
 
 unassigned = set([i for i in range(d)])
 assigned = set()
