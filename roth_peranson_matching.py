@@ -13,29 +13,29 @@ hd = list(map(int,input().rstrip().split(" ")))
 h = hd[0]
 d = hd[1]
 print(h)
-h_l_u = [] # (lower quota,upper quota) of hospital i at ith index
+h_l_u = [(0,0)] # (lower quota,upper quota) of hospital i at ith index
 h_list = dict() # a dict of (key,value)->(doctor,preference) of hospital i at ith index
 # # h_list_dict = dict()
 d_list = dict() # tuples of the kind (doctor number, a dict of (key,value)->(hospital,preference) of
 # # doctor i at ith index, a dict of (key, value)->(preference,hospital) of doctor i at ith index)
 # # d_list_2 = [] #a dict of (key, value)->(preference,hospital) of doctor i at ith index
 # # d_list_dict = dict()
-for i in range(h):
+for i in range(1,h+1):
     lu = list(map(int,input().rstrip().split(" ")))
     h_l_u.append((lu[0],lu[1]))
     ar = list(map(int,input().rstrip().split(" ")))
     h_list[i] = ({ar[j]:j for j in range(len(ar))},{j:ar[j] for j in range(len(ar))})
 print(h_list)
-for i in range(d):
+for i in range(1,d+1):
     ar = list(map(int, input().rstrip().split(" ")))
     d_list[i] = ({ar[j]:j for j in range(len(ar))},{j:ar[j] for j in range(len(ar))})
 print(d_list)
-unassigned = set([i for i in range(d)])
+unassigned = set([i+1 for i in range(d)])
 print("unassigned = "+str(unassigned))
 assigned = set()
 cant_assign = set()
-start_from = [0 for i in range(d)]
-h_docs_assigned_heaps = [[] for i in range(h)]
+start_from = [0 for i in range(d+1)]
+h_docs_assigned_heaps = [[] for i in range(h+1)]
 while(unassigned):
     d = unassigned.pop()
     unassigned.add(d)
@@ -94,7 +94,7 @@ print(unassigned)
 print("can't assign -")
 print(cant_assign)
 print("h is "+str(h))
-for i in range(hd[0]):
+for i in range(1,hd[0]+1):
     print("hospital "+str(i)+" has the following doctors")
     for pref in h_docs_assigned_heaps[i]:
         print(h_list[i][1][pref])
