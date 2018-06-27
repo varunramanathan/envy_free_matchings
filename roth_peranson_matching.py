@@ -71,6 +71,7 @@ while(unassigned):
                     print("unassigned was: " + str(unassigned))
                     unassigned.add(min_doc_removed)
                     print("unassigned is: " + str(unassigned))
+                    break
                 else: #cannot replace anyone
                     heapq.heappush(h_docs_assigned_heaps[h],min_doc_removed_pref)
                     continue
@@ -81,6 +82,9 @@ while(unassigned):
                 print("unassigned-")
                 print(unassigned)
                 unassigned.remove(d)
+                print("unassigned-")
+                print(unassigned)
+                break
     if start_from[d]>= h: #no more hospitals left to start
         if d in unassigned:
             unassigned.remove(d)
