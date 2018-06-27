@@ -1,5 +1,8 @@
 import heapq
 '''
+This code finds the stable matching for the HR instance where lower bounds are replaced by zero
+and upper bounds are replaced by the original lower bounds.
+
 input starts with number of hospitals and number of doctors space separated
 For each hospital, there are two lines of input
 the first line contains "l u" (without the quotes) which are the lower and upper quotas
