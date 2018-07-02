@@ -58,7 +58,7 @@ while(unassigned):
             if len(h_docs_assigned_heaps[h])==h_l_u[h][0]: #all places are filled
                 print("But all the places have been filled at hospital "+str(h)+".")
                 print("Doctors at hospital "+str(h)+" are : "+str(h_docs_assigned_heaps[h])+".")
-                min_doc_removed_pref = heapq.heappop(h_docs_assigned_heaps[h]) #the worst ranked doc's ranking
+                min_doc_removed_pref = -(heapq.heappop(h_docs_assigned_heaps[h])) #the worst ranked doc's ranking
                 min_doc_removed = h_list[h][1][min_doc_removed_pref]
                 print("Lowest ranked doctor in hospital "+str(h)+" right now is "+str(min_doc_removed)+" with preference "+str(min_doc_removed_pref)+".")
                 if min_doc_removed_pref>h_list[h][0][d]: #if d has a better rank than the worst ranked doc's rank
@@ -70,7 +70,7 @@ while(unassigned):
                     # print("unassigned was: " + str(unassigned))
                     unassigned.remove(d)
                     # print("unassigned is: " + str(unassigned))
-                    heapq.heappush(h_docs_assigned_heaps[h],h_list[h][0][d])
+                    heapq.heappush(h_docs_assigned_heaps[h],-(h_list[h][0][d]))
 
                     # print("assigned was: " + str(assigned))
                     assigned.remove(min_doc_removed)
@@ -83,11 +83,11 @@ while(unassigned):
                 else: #cannot replace anyone
                     print("But the preference of present doctor " + str(d) + " is " + str(h_list[h][0][
                         d]) + ", which is NOT better.")
-                    heapq.heappush(h_docs_assigned_heaps[h],min_doc_removed_pref)
+                    heapq.heappush(h_docs_assigned_heaps[h],-min_doc_removed_pref)
                     continue
             else: #some space is still left
                 print("And, there is space!")
-                heapq.heappush(h_docs_assigned_heaps[h],h_list[h][0][d])
+                heapq.heappush(h_docs_assigned_heaps[h],-(h_list[h][0][d]))
                 print("Assigned doctor "+str(d)+" to hospital "+str(h)+".")
                 assigned.add(d)
                 # print("unassigned-")
@@ -113,4 +113,4 @@ while(unassigned):
 for i in range(1,hd[0]+1):
     print("hospital "+str(i)+" has the following doctors")
     for pref in h_docs_assigned_heaps[i]:
-        print(h_list[i][1][pref])
+        print(h_list[i][1][-pref])
