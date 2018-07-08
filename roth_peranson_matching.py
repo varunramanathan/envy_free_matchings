@@ -29,6 +29,7 @@ for i in range(1,h+1):
     ar = list(map(int,input().rstrip().split(" ")))
     h_list[i] = ({ar[j]:j for j in range(len(ar))},{j:ar[j] for j in range(len(ar))})
 print(h_list)
+print(h_l_u)
 for i in range(1,d+1):
     ar = list(map(int, input().rstrip().split(" ")))
     d_list[i] = ({ar[j]:j for j in range(len(ar))},{j:ar[j] for j in range(len(ar))})
@@ -103,14 +104,16 @@ while(unassigned):
             cant_assign.add(d)
             if d in assigned:
                 print("Wtf")
-# print("assigned -")
-# print(assigned)
-# print("unassigned -")
-# print(unassigned)
-# print("can't assign -")
-# print(cant_assign)
-# print("h is "+str(h))
+
 for i in range(1,hd[0]+1):
     print("hospital "+str(i)+" has the following doctors")
     for pref in h_docs_assigned_heaps[i]:
         print(h_list[i][1][-pref])
+envyfree = True
+for i in range(1,hd[0]+1):
+    if len(h_docs_assigned_heaps[i]) < h_l_u[i][0]:
+        envyfree = False
+        print("Hospital "+str(i)+" doesn't satisfy the 'new upper bound' i.e. the original lower bound of "+str(h_l_u[i][0])+". So no envy free matching exists for the original problem.")
+        break
+if envyfree:
+    print("ENVY FREE TRUE")
