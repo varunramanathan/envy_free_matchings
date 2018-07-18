@@ -11,11 +11,14 @@ the second line contains a list of space seperated values, the ith of which deno
 For each doctor, there is a single line of input
 The line contains a list of space seperated values, the ith of which denotes the ith preferred hospital
 '''
-
+envyfree = True
+errfile = open("error.txt",mode="a")
+# ~/Downloads/summer_2018/cmi/skylark_problem/skylark_code/
+roth_output = open("roth_output.txt",mode="a")
 hd = list(map(int,input().rstrip().split(" ")))
 h = hd[0]
 d = hd[1]
-print(h)
+# print(h)
 h_l_u = [(0,0)] # (lower quota,upper quota) of hospital i at ith index
 h_list = dict() # a dict of (key,value)->(doctor,preference) of hospital i at ith index
 # # h_list_dict = dict()
@@ -28,14 +31,14 @@ for i in range(1,h+1):
     h_l_u.append((lu[0],lu[1]))
     ar = list(map(int,input().rstrip().split(" ")))
     h_list[i] = ({ar[j]:j for j in range(len(ar))},{j:ar[j] for j in range(len(ar))})
-print(h_list)
-print(h_l_u)
+# print(h_list)
+# print(h_l_u)
 for i in range(1,d+1):
     ar = list(map(int, input().rstrip().split(" ")))
     d_list[i] = ({ar[j]:j for j in range(len(ar))},{j:ar[j] for j in range(len(ar))})
-print(d_list)
+# print(d_list)
 unassigned = set([i+1 for i in range(d)])
-print("unassigned = "+str(unassigned))
+# print("unassigned = "+str(unassigned))
 assigned = set()
 cant_assign = set()
 start_from = [0 for i in range(d+1)]
@@ -43,27 +46,27 @@ h_docs_assigned_heaps = [[] for i in range(h+1)]
 while(unassigned):
     d = unassigned.pop()
     unassigned.add(d)
-    print("Doctor: "+str(d))
+    # print("Doctor: "+str(d))
     for pref in range(len(d_list[d][1])):
         h = d_list[d][1][pref]
-        print("Hospital "+str(h))
+        # print("Hospital "+str(h))
         if pref<start_from[d]:
-            print("Already done with hospital "+str(h))
+            # print("Already done with hospital "+str(h))
             continue #if you have already evaluated this hospital, you won't need to come here again
         start_from[d] = pref+1
         if d not in h_list[h][0]: #d is not acceptable for hospital h
-            print("Doctor "+str(d)+" is not accepted by hospital"+str(h)+".")
+            # print("Doctor "+str(d)+" is not accepted by hospital"+str(h)+".")
             continue
         else:
-            print("Doctor " + str(d) + " IS accepted by hospital" + str(h) + ".")
+            # print("Doctor " + str(d) + " IS accepted by hospital" + str(h) + ".")
             if len(h_docs_assigned_heaps[h])==h_l_u[h][0]: #all places are filled
-                print("But all the places have been filled at hospital "+str(h)+".")
-                print("Doctors at hospital "+str(h)+" are : "+str(h_docs_assigned_heaps[h])+".")
+                # print("But all the places have been filled at hospital "+str(h)+".")
+                # print("Doctors at hospital "+str(h)+" are : "+str(h_docs_assigned_heaps[h])+".")
                 min_doc_removed_pref = -(heapq.heappop(h_docs_assigned_heaps[h])) #the worst ranked doc's ranking
                 min_doc_removed = h_list[h][1][min_doc_removed_pref]
-                print("Lowest ranked doctor in hospital "+str(h)+" right now is "+str(min_doc_removed)+" with preference "+str(min_doc_removed_pref)+".")
+                # print("Lowest ranked doctor in hospital "+str(h)+" right now is "+str(min_doc_removed)+" with preference "+str(min_doc_removed_pref)+".")
                 if min_doc_removed_pref>h_list[h][0][d]: #if d has a better rank than the worst ranked doc's rank
-                    print("But the preference of present doctor "+str(d)+" is "+str(h_list[h][0][d])+", which is better.")
+                    # print("But the preference of present doctor "+str(d)+" is "+str(h_list[h][0][d])+", which is better.")
                     #add d to assigned and add d to h_docs_assigned_heaps[h][0]
                     # print("assigned was: "+str(assigned))
                     assigned.add(d)
@@ -79,17 +82,17 @@ while(unassigned):
                     # print("unassigned was: " + str(unassigned))
                     unassigned.add(min_doc_removed)
                     # print("unassigned is: " + str(unassigned))
-                    print("So removing "+str(min_doc_removed)+" and adding "+str(d)+" to hospital "+str(h)+".")
+                    # print("So removing "+str(min_doc_removed)+" and adding "+str(d)+" to hospital "+str(h)+".")
                     break
                 else: #cannot replace anyone
-                    print("But the preference of present doctor " + str(d) + " is " + str(h_list[h][0][
-                        d]) + ", which is NOT better.")
+                    # print("But the preference of present doctor " + str(d) + " is " + str(h_list[h][0][
+                    #     d]) + ", which is NOT better.")
                     heapq.heappush(h_docs_assigned_heaps[h],-min_doc_removed_pref)
                     continue
             else: #some space is still left
-                print("And, there is space!")
+                # print("And, there is space!")
                 heapq.heappush(h_docs_assigned_heaps[h],-(h_list[h][0][d]))
-                print("Assigned doctor "+str(d)+" to hospital "+str(h)+".")
+                # print("Assigned doctor "+str(d)+" to hospital "+str(h)+".")
                 assigned.add(d)
                 # print("unassigned-")
                 # print(unassigned)
@@ -98,22 +101,30 @@ while(unassigned):
                 # print(unassigned)
                 break
     if start_from[d]>= len(d_list[d][0]): #no more hospitals left to start
-        print("All hospitals for doctor "+str(d)+" have been checked already.")
+        # print("All hospitals for doctor "+str(d)+" have been checked already.")
         if d in unassigned:
             unassigned.remove(d)
             cant_assign.add(d)
             if d in assigned:
-                print("Wtf")
+                envyfree = False
+                print("Unassigned doctor is in assigned")
+                break
 
-for i in range(1,hd[0]+1):
-    print("hospital "+str(i)+" has the following doctors")
-    for pref in h_docs_assigned_heaps[i]:
-        print(h_list[i][1][-pref])
-envyfree = True
+# for i in range(1,hd[0]+1):
+#     print("hospital "+str(i)+" has the following doctors")
+#     for pref in h_docs_assigned_heaps[i]:
+#         print(h_list[i][1][-pref])
+envyfree = envyfree and True
 for i in range(1,hd[0]+1):
     if len(h_docs_assigned_heaps[i]) < h_l_u[i][0]:
         envyfree = False
-        print("Hospital "+str(i)+" doesn't satisfy the 'new upper bound' i.e. the original lower bound of "+str(h_l_u[i][0])+". So no envy free matching exists for the original problem.")
+        # print("Hospital "+str(i)+" doesn't satisfy the 'new upper bound' i.e. the original lower bound of "+str(h_l_u[i][0])+". So no envy free matching exists for the original problem.")
         break
 if envyfree:
     print("ENVY FREE TRUE")
+    print(*hd,file=roth_output)
+    for i in range(1,hd[0]+1):
+        print(i,file=roth_output)
+        for pref in h_docs_assigned_heaps[i]:
+            print(h_list[i][1][-pref],end=" ",file=roth_output)
+        print("",file=roth_output)
